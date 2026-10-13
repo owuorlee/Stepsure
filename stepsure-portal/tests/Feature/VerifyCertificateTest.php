@@ -59,6 +59,14 @@ class VerifyCertificateTest extends TestCase
         $this->get($certificate->verifyUrl())->assertOk()->assertSee('Valid certificate')->assertSee('Jacinta Example');
     }
 
+    public function test_qr_codes_can_use_the_permanent_public_address(): void
+    {
+        config(['certificates.verify_base_url' => 'https://certificates.stepsureresearchinstitute.org/']);
+        $certificate = Certificate::factory()->create(['code' => '3f9a2c7d1b84']);
+
+        $this->assertSame('https://certificates.stepsureresearchinstitute.org/verify/3f9a2c7d1b84', $certificate->verifyUrl());
+    }
+
     public function test_internal_details_are_not_shown_publicly(): void
     {
         $certificate = Certificate::factory()->revoked()->create(['participant_email' => 'private@example.com', 'revoked_reason' => 'Internal note']);

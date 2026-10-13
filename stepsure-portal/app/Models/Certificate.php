@@ -49,7 +49,9 @@ class Certificate extends Model
 
     public function verifyUrl(): string
     {
-        return route('verify.show', $this->code);
+        $base = config('certificates.verify_base_url');
+
+        return $base ? rtrim($base, '/').'/verify/'.$this->code : route('verify.show', $this->code);
     }
 
     public function isValid(): bool
